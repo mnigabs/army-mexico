@@ -63,6 +63,8 @@ section .sub{margin:2px 0 14px;color:var(--soft);font-size:.95rem}
 .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;font-size:.82rem;color:var(--soft)}
 .badge{padding:2px 10px;border-radius:999px;background:var(--okbg);color:var(--ok);font-weight:700}
 .badge.fin{background:var(--chip);color:var(--soft)}
+.badge.pend{background:#FFF1CC;color:#7A5200}
+@media (prefers-color-scheme: dark){ .badge.pend{background:#4A3600;color:#FFD66B} }
 .btn{display:flex;align-items:center;justify-content:center;margin-top:14px;min-height:48px;
   background:var(--main);color:#fff;text-decoration:none;font-weight:700;border-radius:10px;padding:10px 18px}
 .btn:hover,.btn:focus-visible{background:var(--main-2);outline:3px solid var(--chip)}
@@ -119,6 +121,10 @@ const SECCIONES = [
       { nombre:"Votaciones 2026 MAMA AWARDS | Mnet Plus", boton:"Ir a votar", url:"https://mnetplus.world/event/2026-mama?deeplink=mnetplus%3A%2F%2Fvote%2Ftemplates%2Fmama-fans-choice-vote-r2-v2%2F6acecda6f3778e1b06f5170b%3Furl_fallback_type%3Dupdate&missionType=MAMA_2026_FANS_CHOICE_VOTE_2ND_SHARE&refererCode=6BWEUA8T", instrucciones:"Descarga la app y vota por BTS en las categorías FAN'S CHOICE MALE y  FAN'S CHOICE OF THE YEAR with VISA", fecha:"Cierran cotaciones el 8 de noviembre 8:59 am hora centro MX", estado:"Activo" },
       { nombre:"Votaciones MMA2026 | Berriz", boton:"Ir a votar", url:"https://berriz.in/en/", instrucciones:"Vota por BTS en la categorías GlobalTOP10", fecha:"Cierran votaciones el 13 de noviembre 8:59 am hora centro MX", estado:"Activo" },
       { nombre:"Kid Choice Awards", boton:"Ir a votar", url:"https://kca.nick.tv/es/", instrucciones:"Vota por BTS en las categorías: Grupo o duo musical favorito, Album favorito y Canción favorita. Debes votar por todas las categorías.", fecha:"La premiación será el 14 de noviembre", estado:"Activo" },
+  ]},
+  { id:"choeaedol", icono:"download", titulo:"Guía Choeaedol (GDA)",
+    sub:"Cómo votar para los GDA con la app Choeaedol.", etiquetaFecha:"Actualizado", items:[
+    { nombre:"Guía en video: votar en Choeaedol", tipo:"video", archivo:"material/tutorial-choeaedol.mp4", vista:"material/portada-choeaedol.PNG", sinDescarga:true, boton:"Descargar Choeaedol", url:"https://www.myloveidol.com/?shortlink=qg8w9zx0&source_caller=ui&onelink_id=krQS&af_dp=choeaedol%3A%2F%2F&c=X_Profile_EN&pid=X&af_xp=custom", descripcion:"Video guia para recolectar corazones gratis.", instrucciones:"Recolecta corazones para las votaciones GDA que abrirán en diciembre.", estado:"Activo" },
   ]},
   { id:"difundir", icono:"megaphone", titulo:"Para difundir e interactuar",
     sub:"Publicaciones a las que hay que dar like, compartir o comentar.", etiquetaFecha:"Actualizado", items:[
@@ -216,7 +222,7 @@ function dibujar(){
       if(i.estado||i.fecha||i.tipo||i.autoria){
         var m=el("div","meta");
         if(ICONOS[i.tipo]){var t=el("span","tipo");t.appendChild(icono(i.tipo));t.appendChild(document.createTextNode({video:"Video",imagen:"Imagen",guia:"Guía"}[i.tipo]));m.appendChild(t);}
-        if(i.estado)m.appendChild(el("span","badge"+(fin?" fin":""),i.estado));
+        if(i.estado){var pend=(i.estado||"").toLowerCase()==="pendiente";m.appendChild(el("span","badge"+(fin?" fin":"")+(pend?" pend":""),i.estado));}
         if(i.fecha)m.appendChild(el("span","",s.etiquetaFecha+": "+i.fecha));
         if(i.autoria)m.appendChild(el("span","","Créditos: "+i.autoria));
         c.appendChild(m);
@@ -224,8 +230,8 @@ function dibujar(){
       var u=urlSegura(i.url);
       if(!fin&&(ar||u)){
         var acts=el("div","acts");
-        if(ar){var d=el("a","btn");d.appendChild(icono("download"));d.appendChild(document.createTextNode(i.boton&&!u?i.boton:"Descargar"));d.href=ar;d.setAttribute("download","");acts.appendChild(d);}
-        if(u){var b=el("a","btn"+(ar?" alt":""),"");b.appendChild(document.createTextNode(i.boton||(ar?"Ver en su publicación original":"Abrir enlace")));b.href=u;b.target="_blank";b.rel="noopener noreferrer nofollow";acts.appendChild(b);}
+        if(ar&&!i.sinDescarga){var d=el("a","btn");d.appendChild(icono("download"));d.appendChild(document.createTextNode(i.boton&&!u?i.boton:"Descargar"));d.href=ar;d.setAttribute("download","");acts.appendChild(d);}
+        if(u){var b=el("a","btn"+(ar&&!i.sinDescarga?" alt":""),"");b.appendChild(document.createTextNode(i.boton||(ar?"Ver en su publicación original":"Abrir enlace")));b.href=u;b.target="_blank";b.rel="noopener noreferrer nofollow";acts.appendChild(b);}
         c.appendChild(acts);
       }
       sec.appendChild(c);
